@@ -8,7 +8,7 @@ function LoginPage() {
             <input type="text"  placeholder='نام کاربری'/>
             <input type="password"  placeholder='رمز عبور'/>
             <button type='submit'> ورود</button>
-            <a href="#">حساب کاربری دارید؟</a>
+            <a href="#">اسجاد حساب کاربری</a>
         </form>
     </div>
   )
