@@ -9,4 +9,13 @@ const registerUser = async (username, password) => {
   }
 };
 
-export { registerUser };
+const loginUser =async (username , password)=>{
+  try {
+    const response = await api.post("auth/login", { username, password });
+    return {response}
+  } catch (error) {
+    return {error}
+  }
+}
+
+export { registerUser , loginUser };

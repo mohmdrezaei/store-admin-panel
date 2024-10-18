@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { registerUser } from "../services/auth";
 import { Link, useNavigate } from "react-router-dom";
 
-function RegisterPage() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    confirmPassword: "",
-  });
+function RegisterPage({ formData, setFormData }) {
+  const navigate = useNavigate();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -28,11 +23,12 @@ function RegisterPage() {
     }
 
     const { response, error } = await registerUser(username, password);
-    if(response){
+    if (response) {
       console.log("ثبت نام با موفقیت انجام شد:", response);
-      navigate("/login")
+      setFormData({ username: "", password: "" });
+      navigate("/login");
     }
-    if(error){
+    if (error) {
       console.log("ثبت نام با مشکل ربرو شد!:", error.response.data.message);
     }
   };
@@ -41,7 +37,7 @@ function RegisterPage() {
     <div>
       <h1>فرم ثبت نام</h1>
       <form onSubmit={submitHandler}>
-      <input
+        <input
           type="text"
           name="username"
           placeholder="نام کاربری"
@@ -53,11 +49,11 @@ function RegisterPage() {
           name="password"
           placeholder="رمز عبور"
           value={formData.password}
-          onChange={changeHandler} 
+          onChange={changeHandler}
         />
         <input
           type="password"
-          name="confirmPassword" 
+          name="confirmPassword"
           placeholder="تکرار رمز عبور"
           value={formData.confirmPassword}
           onChange={changeHandler}
