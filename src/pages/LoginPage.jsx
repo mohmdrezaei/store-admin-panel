@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/auth";
+import { setCookie } from "../utils/cookie";
 
 function LoginPage({ formData, setFormData }) {
   const navigate = useNavigate()
@@ -17,6 +18,7 @@ const submitHandler = async(e) => {
   const {response , error} =await loginUser(username, password);
   if(response) {
     console.log("ورود با موفقیت انجام شد:", response);
+    setCookie(response.data)
     navigate("/dashboard")
   }
   if(error) {
