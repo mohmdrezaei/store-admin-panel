@@ -1,14 +1,17 @@
-import { QueryClient , QueryClientProvider } from "@tanstack/react-query"
+
 import Dashboard from "./Dashboard"
+import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import { Navigate, Route, Routes } from "react-router-dom"
 
 function App() {
-  const queryClient = new QueryClient()
+  
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Dashboard /> */}
-      <RegisterPage />
-    </QueryClientProvider>
+      <Routes >
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+      </Routes>
   )
 }
 

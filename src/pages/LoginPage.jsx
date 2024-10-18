@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function LoginPage() {
   return (
@@ -8,7 +9,7 @@ function LoginPage() {
             <input type="text"  placeholder='نام کاربری'/>
             <input type="password"  placeholder='رمز عبور'/>
             <button type='submit'> ورود</button>
-            <a href="#">اسجاد حساب کاربری</a>
+            <Link to="/register">ایجاد حساب کاربری</Link>
         </form>
     </div>
   )

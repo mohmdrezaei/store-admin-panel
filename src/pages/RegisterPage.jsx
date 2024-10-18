@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { registerUser } from "../services/auth";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -28,6 +30,7 @@ function RegisterPage() {
     const { response, error } = await registerUser(username, password);
     if(response){
       console.log("ثبت نام با موفقیت انجام شد:", response);
+      navigate("/login")
     }
     if(error){
       console.log("ثبت نام با مشکل ربرو شد!:", error.response.data.message);
@@ -61,7 +64,7 @@ function RegisterPage() {
         />
         <button type="submit">ثبت نام</button>
       </form>
-      <a href="#">حساب کاربری دارید؟</a>
+      <Link to="/login">حساب کاربری دارید؟</Link>
     </div>
   );
 }
