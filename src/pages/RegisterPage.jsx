@@ -1,6 +1,9 @@
 import { registerUser } from "services/auth";
 import { Link, useNavigate } from "react-router-dom";
 
+import styles from "./AuthPage.module.css"
+import logo from "assets/Union.png"
+
 function RegisterPage({ formData, setFormData }) {
   const navigate = useNavigate();
 
@@ -33,7 +36,8 @@ function RegisterPage({ formData, setFormData }) {
   };
 
   return (
-    <div>
+    <div className={styles.auth}>
+      <img src={logo} alt="" />
       <h1>فرم ثبت نام</h1>
       <form onSubmit={submitHandler}>
         <input
@@ -42,6 +46,7 @@ function RegisterPage({ formData, setFormData }) {
           placeholder="نام کاربری"
           value={formData.username}
           onChange={changeHandler}
+          className={styles.input}
         />
         <input
           type="password"
@@ -49,6 +54,7 @@ function RegisterPage({ formData, setFormData }) {
           placeholder="رمز عبور"
           value={formData.password}
           onChange={changeHandler}
+          className={styles.input}
         />
         <input
           type="password"
@@ -56,6 +62,7 @@ function RegisterPage({ formData, setFormData }) {
           placeholder="تکرار رمز عبور"
           value={formData.confirmPassword}
           onChange={changeHandler}
+          className={styles.input}
         />
         <button type="submit">ثبت نام</button>
       </form>

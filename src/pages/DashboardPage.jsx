@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 
-function Dashboard() {
+function DashboardPage() {
 
     const fetchProducts = async () => {
         const response = await fetch('http://localhost:3000/products')
@@ -22,4 +22,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default DashboardPage

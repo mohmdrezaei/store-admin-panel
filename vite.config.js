@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 const paths = [
   "src",
+  "assets",
   "components",
   "configs",
   "layots",

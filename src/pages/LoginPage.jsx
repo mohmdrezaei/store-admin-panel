@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "services/auth"; 
 import { setCookie } from "utils/cookie";
 
+import styles from "./AuthPage.module.css"
+import logo from "assets/Union.png"
+
 function LoginPage({ formData, setFormData }) {
   const navigate = useNavigate()
   const changeHandler = (e) => {
@@ -28,7 +31,8 @@ const submitHandler = async(e) => {
 }
 
   return (
-    <div>
+    <div className={styles.auth}>
+      <img src={logo} alt="" />
       <h1>فرم ورود</h1>
       <form onSubmit={submitHandler}>
         <input
@@ -37,6 +41,7 @@ const submitHandler = async(e) => {
           placeholder="نام کاربری"
           value={formData.username}
           onChange={changeHandler}
+          className={styles.input}
         />
         <input
           name="password"
@@ -44,9 +49,10 @@ const submitHandler = async(e) => {
           placeholder="رمز عبور"
           value={formData.password}
           onChange={changeHandler}
+          className={styles.input}
         />
         <button type="submit"> ورود</button>
-        <Link to="/register">ایجاد حساب کاربری</Link>
+        <Link to="/register">ایجاد حساب کاربری!</Link>
       </form>
     </div>
   );
