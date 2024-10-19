@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/auth";
-import { setCookie } from "../utils/cookie";
+import { loginUser } from "services/auth"; 
+import { setCookie } from "utils/cookie";
 
 function LoginPage({ formData, setFormData }) {
   const navigate = useNavigate()

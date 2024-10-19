@@ -1,8 +1,8 @@
 
 import { useState } from "react";
-import Dashboard from "./Dashboard"
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
+import Dashboard from "./Dashboard";
+import LoginPage from "pages/LoginPage";
+import RegisterPage from "pages/RegisterPage"
 import { Navigate, Route, Routes } from "react-router-dom"
 
 function App() {

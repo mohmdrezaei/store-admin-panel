@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { registerUser } from "../services/auth";
+import { registerUser } from "services/auth";
 import { Link, useNavigate } from "react-router-dom";
 
 function RegisterPage({ formData, setFormData }) {
