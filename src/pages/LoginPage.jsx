@@ -1,13 +1,15 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "services/auth"; 
+
 import { setCookie } from "utils/cookie";
 
-import styles from "./AuthPage.module.css"
-import logo from "assets/Union.png"
+import styles from "./AuthPage.module.css";
+import logo from "assets/Union.png";
+import { useLogin } from "services/mutations";
 
 function LoginPage({ formData, setFormData }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { mutate } = useLogin();
+
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -15,20 +17,24 @@ function LoginPage({ formData, setFormData }) {
       [name]: value,
     });
   };
-const submitHandler = async(e) => {
-  e.preventDefault();
-  const { username, password } = formData;
-  const {response , error} =await loginUser(username, password);
-  if(response) {
-    console.log("ورود با موفقیت انجام شد:", response);
-    setCookie(response.data)
-    navigate("/dashboard")
-  }
-  if(error) {
-    console.log("ورود با مشکل روبرو شد!:", error.response.data.message);
-    alert(error.response.data.message);
-  }
-}
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const { username, password } = formData;
+
+    mutate(
+      { username, password },
+      {
+        onSuccess: (data) => {
+          console.log("ورود با موفقیت انجام شد:", data);
+          setCookie(data?.data.token);
+          navigate("/dashboard");
+        },
+        onError: (error) => {
+          console.log("ثبت نام با مشکل ربرو شد!:", error.response.data.message);
+        },
+      }
+    );
+  };
 
   return (
     <div className={styles.auth}>
