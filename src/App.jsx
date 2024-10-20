@@ -2,19 +2,23 @@ import { useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "pages/LoginPage";
 import RegisterPage from "pages/RegisterPage";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, redirect, Route, Routes, useNavigate } from "react-router-dom";
 import PageNotFound from "pages/404";
 import { getCookie } from "utils/cookie";
 
 function App() {
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
   });
   const token = getCookie("token");
-  console.log(token);
 
+  const isAuthenticated = async () => {
+    if (token) redirect("/dashboard");
+    return null;
+  };
   return (
     <BrowserRouter>
       <Routes>
@@ -35,9 +39,10 @@ function App() {
           }
         />
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route
+        <Route exact={true}
           path="/dashboard"
-          element={token ? <DashboardPage /> : <Navigate to="/login" />}
+          element={ <DashboardPage />}
+          loader={async () => await isAuthenticated()}
         />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
