@@ -25,8 +25,8 @@ function LoginPage({ formData, setFormData }) {
       { username, password },
       {
         onSuccess: (data) => {
-          console.log("ورود با موفقیت انجام شد:", data);
-          setCookie(data?.data.token);
+          console.log("ورود با موفقیت انجام شد:", data.data);
+          setCookie("token",data?.data.token);
           navigate("/dashboard");
         },
         onError: (error) => {
