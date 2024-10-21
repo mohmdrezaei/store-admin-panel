@@ -6,8 +6,10 @@ import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
-import close from "../assets/close.png";
+
 import { useState } from "react";
+
+import DeleteModal from "components/DeleteModal.";
 
 function DashboardPage() {
   const [modal, setModal] = useState({ show: false, id: "" });
@@ -83,16 +85,7 @@ function DashboardPage() {
       </table>
 
       {modal.show && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <div className={styles.modalContent}>
-              <img src={close} alt="" />
-              <p>آیا از حذف محصول مطمئن هستسد؟</p>
-              <button className={styles.delete} >حذف</button>
-              <button className={styles.cancel} onClick={()=>setModal({ show: false, id: "" })}>لغو</button>
-            </div>
-          </div>
-        </div>
+       <DeleteModal setModal={setModal} />
       )}
     </div>
   );
