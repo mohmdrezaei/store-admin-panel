@@ -1,0 +1,75 @@
+.container {
+    width: 1140px;
+    margin: auto;
+}
+
+.container header {
+    background-color: #fff;
+    border: 1px solid #E4E4E4;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.container header input {
+   padding: 5px 10px;
+   margin: 10px 0px;
+   border: none;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    gap: 5px;
+}
+
+.add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 40px 10px 10px 10px;
+}
+
+.add button {
+    border: none;
+    background-color: #55A3F0;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #fff;
+    cursor: pointer;
+}
+.title {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.table  {
+    width: 100%; 
+    text-align: center;
+    border-collapse: collapse;
+    border-radius: 30px;
+    border: 1px solid #E4E4E4;
+    overflow: hidden;
+}
+
+.table  th {
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #F2F2F2;
+   height: 70px;
+   
+}
+
+.table tbody tr {
+    height: 60px;
+    background-color: #fff;
+    border-bottom: 1px solid #F2F2F2;
+    color: #282828;
+}
+
+.oprations a {
+   padding-right: 10px;
+}
+
