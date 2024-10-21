@@ -6,8 +6,15 @@ import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
+import close from "../assets/close.png";
+import { useState } from "react";
 
 function DashboardPage() {
+  const [modal, setModal] = useState({ show: false, id: "" });
+  const showModal = (e) => {
+    e.preventDefault();
+    setModal({ show: true, id: "" });
+  };
   const { isPending, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -16,6 +23,7 @@ function DashboardPage() {
   if (isPending) return <div>Loading...</div>;
 
   if (error) return "An error has occurred: " + error.message;
+  const products = data.data.data;
 
   console.log(data);
   return (
@@ -56,16 +64,16 @@ function DashboardPage() {
           </tr>
         </thead>
         <tbody>
-          {data.data.data.map((product) => (
+          {products.map((product) => (
             <tr key={product.id}>
               <td>{product.name}</td>
               <td>{product.quantity}</td>
               <td>{product.id}</td>
               <td className={styles.oprations}>
-                <a href="">
+                <a href="" >
                   <BsPencilSquare color="#4ADE80" />
                 </a>
-                <a href="">
+                <a onClick={showModal}>
                   <BsTrash color="#F43F5E" />
                 </a>
               </td>
@@ -73,6 +81,19 @@ function DashboardPage() {
           ))}
         </tbody>
       </table>
+
+      {modal.show && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <img src={close} alt="" />
+              <p>آیا از حذف محصول مطمئن هستسد؟</p>
+              <button className={styles.delete} >حذف</button>
+              <button className={styles.cancel} onClick={()=>setModal({ show: false, id: "" })}>لغو</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
