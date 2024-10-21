@@ -27,8 +27,14 @@
     margin-top: 40px;
     font-size: 20px;
 }
-.modalContent button {
-    margin:  25px 0 10px 15px;
+.buttons{
+    display: flex;
+   gap: 15px;
+   margin-top: 25px;
+   padding: 0 30px;
+}
+.buttons button {
+    width: 100%;
     border: none;
     padding: 10px 55px;
     border-radius: 8px;

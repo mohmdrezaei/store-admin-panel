@@ -9,13 +9,21 @@ import { GiSettingsKnobs } from "react-icons/gi";
 
 import { useState } from "react";
 
-import DeleteModal from "components/DeleteModal.";
+import DeleteModal from "components/DeleteModal/DeleteModal";
+import AddModal from "components/AddModal/AddModal";
 
 function DashboardPage() {
-  const [modal, setModal] = useState({ show: false, id: "" });
-  const showModal = (e) => {
+  const [deleteModal, setDeleteModal] = useState({ show: false, id: "" });
+  const [addModal, setAddModal] = useState(false);
+
+  const showDeleteModal = (e) => {
     e.preventDefault();
-    setModal({ show: true, id: "" });
+    setDeleteModal({ show: true, id: "" });
+  };
+
+  const showAddModal = (e) => {
+    e.preventDefault();
+    setAddModal(true);
   };
   const { isPending, error, data } = useQuery({
     queryKey: ["products"],
@@ -30,6 +38,9 @@ function DashboardPage() {
   console.log(data);
   return (
     <div className={styles.container}>
+      {deleteModal.show && <DeleteModal setDeleteModal={setDeleteModal} />}
+      {addModal && <AddModal setAddModal={setAddModal} />}
+
       <header>
         <div>
           <BsSearch />
@@ -52,7 +63,7 @@ function DashboardPage() {
         </div>
 
         <div>
-          <button>افزودن محصول</button>
+          <button onClick={showAddModal}>افزودن محصول</button>
         </div>
       </div>
 
@@ -72,10 +83,10 @@ function DashboardPage() {
               <td>{product.quantity}</td>
               <td>{product.id}</td>
               <td className={styles.oprations}>
-                <a href="" >
+                <a href="">
                   <BsPencilSquare color="#4ADE80" />
                 </a>
-                <a onClick={showModal}>
+                <a onClick={showDeleteModal}>
                   <BsTrash color="#F43F5E" />
                 </a>
               </td>
@@ -83,10 +94,6 @@ function DashboardPage() {
           ))}
         </tbody>
       </table>
-
-      {modal.show && (
-       <DeleteModal setModal={setModal} />
-      )}
     </div>
   );
 }
