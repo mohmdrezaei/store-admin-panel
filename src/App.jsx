@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "pages/LoginPage";
 import RegisterPage from "pages/RegisterPage";
 import { BrowserRouter, Navigate, redirect, Route, Routes, useNavigate } from "react-router-dom";
 import PageNotFound from "pages/404";
 import { getCookie } from "utils/cookie";
+
+
 
 function App() {
 
@@ -15,10 +17,7 @@ function App() {
   });
   const token = getCookie("token");
 
-  const isAuthenticated = async () => {
-    if (token) redirect("/dashboard");
-    return null;
-  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -30,19 +29,15 @@ function App() {
         />
         <Route
           path="/login"
-          element={
-            !token ? (
-              <LoginPage formData={formData} setFormData={setFormData} />
-            ) : (
-              <Navigate to="/dashboard" />
-            )
-          }
+          element={!token ? <LoginPage formData={formData} setFormData={setFormData}/>  : <Navigate to="/dashboard" />}
         />
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route exact={true}
+      <Route
+          path="/"
+          element={<Navigate to="/login" />}
+        />
+        <Route
           path="/dashboard"
-          element={ <DashboardPage />}
-          loader={async () => await isAuthenticated()}
+          element={token ? <DashboardPage /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -67,6 +67,9 @@
     width: 100%;
     color: #282828CC;
 }
+.buttons button:disabled {
+    opacity: 0.5;
+}
 .add {
     background-color: #55A3F0 ;
     color: #fff!important;

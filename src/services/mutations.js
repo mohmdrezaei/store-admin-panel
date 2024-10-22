@@ -13,4 +13,7 @@ const useLogin = () => {
     return useMutation({ mutationFn });
   };
 
-export { useRegister , useLogin };
+  const addProduct = data => api.post("products" , data)
+   
+
+export { useRegister , useLogin , addProduct };
