@@ -14,6 +14,8 @@ const useLogin = () => {
   };
 
   const addProduct = data => api.post("products" , data)
+
+  const deleteProduct = id => api.delete(`products/${id}`)
    
 
-export { useRegister , useLogin , addProduct };
+export { useRegister , useLogin , addProduct ,deleteProduct};

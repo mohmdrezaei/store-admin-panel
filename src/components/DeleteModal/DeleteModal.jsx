@@ -1,7 +1,9 @@
 import close from "assets/close.png";
 import styles from "./DeleteModal.module.css";
 
-function DeleteModal({setDeleteModal}) {
+function DeleteModal({setDeleteModal,confirmDelete}) {
+
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
@@ -9,7 +11,7 @@ function DeleteModal({setDeleteModal}) {
           <img src={close} alt="" />
           <p>آیا از حذف این محصول مطمئنید؟</p>
           <div className={styles.buttons}>
-          <button className={styles.delete}>حذف</button>
+          <button className={styles.delete} onClick={confirmDelete}>حذف</button>
           <button
             className={styles.cancel}
             onClick={() => setDeleteModal({ show: false, id: "" })}

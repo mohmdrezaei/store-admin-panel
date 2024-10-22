@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "services/queries";
 
 import styles from "./DashboardPage.module.css";
@@ -11,34 +11,53 @@ import { useState } from "react";
 
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
+import { deleteProduct } from "services/mutations";
 
 function DashboardPage() {
+  const queryClient = useQueryClient();
   const [deleteModal, setDeleteModal] = useState({ show: false, id: "" });
   const [addModal, setAddModal] = useState(false);
-
-  const showDeleteModal = (e) => {
+  const { mutate } = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries("products");
+      setDeleteModal(false);
+      console.log("محصول با موفقیت حذف شد");
+    },
+    onError: (error) => {
+      console.log("مشکلی پیش آمده است:", error.response.data.message);
+    },
+  });
+  const deleteHandler = (e, id) => {
     e.preventDefault();
-    setDeleteModal({ show: true, id: "" });
+    setDeleteModal({ show: true, id: id });
+  };
+
+  const confirmDelete = () => {
+    mutate(deleteModal.id);
   };
 
   const showAddModal = (e) => {
     e.preventDefault();
     setAddModal(true);
   };
-  const { isPending, error, data } = useQuery({
+  const { isFetching, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  if (isPending) return <div>Loading...</div>;
+  if (isFetching) return <div>Loading...</div>;
 
   if (error) return "An error has occurred: " + error.message;
   const products = data.data.data;
-
-  console.log(data);
   return (
     <div className={styles.container}>
-      {deleteModal.show && <DeleteModal setDeleteModal={setDeleteModal} />}
+      {deleteModal.show && (
+        <DeleteModal
+          setDeleteModal={setDeleteModal}
+          confirmDelete={confirmDelete}
+        />
+      )}
       {addModal && <AddModal setAddModal={setAddModal} />}
 
       <header>
@@ -67,33 +86,37 @@ function DashboardPage() {
         </div>
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>نام کالا</th>
-            <th> موجودی</th>
-            <th> شناسه کالا</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.quantity}</td>
-              <td>{product.id}</td>
-              <td className={styles.oprations}>
-                <a href="">
-                  <BsPencilSquare color="#4ADE80" />
-                </a>
-                <a onClick={showDeleteModal}>
-                  <BsTrash color="#F43F5E" />
-                </a>
-              </td>
+      {isFetching ? (
+        <p>Loding...</p>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>نام کالا</th>
+              <th> موجودی</th>
+              <th> شناسه کالا</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id}>
+                <td>{product.name}</td>
+                <td>{product.quantity}</td>
+                <td>{product.id}</td>
+                <td className={styles.oprations}>
+                  <a href="">
+                    <BsPencilSquare color="#4ADE80" />
+                  </a>
+                  <a onClick={(e) => deleteHandler(e, product.id)}>
+                    <BsTrash color="#F43F5E" />
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
