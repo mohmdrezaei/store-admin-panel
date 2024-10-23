@@ -14,14 +14,15 @@ import { useState } from "react";
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
 import { deleteProduct } from "services/mutations";
+import { deleteProducts } from "services/mutations";
 
 function DashboardPage() {
   const queryClient = useQueryClient();
-  const [deleteModal, setDeleteModal] = useState({ show: false, id: "" });
+  const [deleteModal, setDeleteModal] = useState({ show: false, ids: [] });
   const [addModal, setAddModal] = useState({ show: false, product: null });
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
- console.log(selectedProducts)
+  console.log(selectedProducts);
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -29,13 +30,14 @@ function DashboardPage() {
         : [...selected, id]
     );
   };
-
+  const mutationFn =
+    selectedProducts.length > 1 ? deleteProducts : deleteProduct;
   const { mutate } = useMutation({
-    mutationFn: deleteProduct,
+    mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries("products");
-      setDeleteModal(false);
-      console.log("محصول با موفقیت حذف شد");
+      setDeleteModal({show:false ,ids:[]});
+      showCheckbox ? console.log("محصولات مورد نظر با موفقیت حذف شدند") :console.log("محصول با موفقیت حذف شد");
     },
     onError: (error) => {
       console.log("مشکلی پیش آمده است:", error.response.data.message);
@@ -43,11 +45,24 @@ function DashboardPage() {
   });
   const deleteHandler = (e, id) => {
     e.preventDefault();
-    setDeleteModal({ show: true, id: id });
+    if (selectedProducts.length === 0) {
+     alert ("هیچ محصولی انتخاب نشده است!")
+      return;
+    }
+    if (showCheckbox && selectedProducts.length > 0) {
+      setDeleteModal({ show: true, ids: selectedProducts });
+    } else {
+      setDeleteModal({ show: true, ids: [id] });
+    }
   };
 
   const confirmDelete = () => {
-    mutate(deleteModal.id);
+    if(selectedProducts.length > 1){
+      mutate(selectedProducts);
+    }
+    else{
+      mutate(deleteModal.id);
+    }
   };
 
   const showAddModal = (e) => {
@@ -123,7 +138,11 @@ function DashboardPage() {
                   />
                 ) : (
                   <div className={styles.groupDelete}>
-                    <BsTrash size="20px" color="#F43F5E" />
+                    <BsTrash
+                      size="20px"
+                      color="#F43F5E"
+                      onClick={(e) => deleteHandler(e, null)}
+                    />
                     <IoCloseSharp
                       size="20px"
                       onClick={() => setShowCheckbox(false)}
