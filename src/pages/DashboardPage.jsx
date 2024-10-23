@@ -98,6 +98,7 @@ function DashboardPage() {
             <tr>
               <th>نام کالا</th>
               <th> موجودی</th>
+              <th> قیمت</th>
               <th> شناسه کالا</th>
               <th></th>
             </tr>
@@ -106,8 +107,9 @@ function DashboardPage() {
             {products.map((product) => (
               <tr key={product.id}>
                 <td>{product.name}</td>
-                <td>{product.quantity}</td>
-                <td>{product.id}</td>
+                <td >{product.quantity}</td>
+                <td>{product.price}</td>
+                <td className={styles.id}>{product.id}</td>
                 <td className={styles.oprations}>
                   <a onClick={(e) => showEditModal(e, product)}>
                     <BsPencilSquare color="#4ADE80" />

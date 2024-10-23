@@ -6,13 +6,14 @@ import { updateProduct } from "services/mutations";
 function AddModal({ setAddModal, product }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
- 
+
+ const mutationFn = product ? updateProduct : addProduct;
   const { mutate, isPending } = useMutation({
-    mutationFn: addProduct,
+    mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries("products");
       setAddModal({show :false , product :null});
-      console.log("محصول با موفقیت افزوده شد");
+      console.log("عملیات با موفقیت انجام شد");
     },
     onError: (error) => {
       console.log("مشکلی پیش آمده است:", error.response.data.message);
@@ -37,10 +38,10 @@ function AddModal({ setAddModal, product }) {
   const submitHandler = (e) => {
     e.preventDefault();
     if (!form.name || !form.quantity || !form.price) return;
-    if(!product) {
-      mutate(form);
+    if(product) {
+      mutate({id: product.id,  ...form})
     }else {
-      updatemutation.mutate({id: product.id,  ...form})
+      mutate(form);
     }
   };
 

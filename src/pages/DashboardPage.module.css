@@ -53,6 +53,7 @@
     border-radius: 30px;
     border: 1px solid #E4E4E4;
     overflow: hidden;
+    font-size: 14px;
 }
 
 .table  th {
@@ -67,14 +68,16 @@
     background-color: #fff;
     border-bottom: 1px solid #F2F2F2;
     color: #282828;
+    
+}
+.table tr td:nth-child(1) {
+width: 20%;
+}
+.id {
+    width: 35%;
 }
 
 .oprations a {
    padding-right: 10px;
    cursor: pointer;
 }
-
-
-
-/* #modal */
-
