@@ -8,14 +8,15 @@ const useRegister = () => {
 };
 
 const useLogin = () => {
-    const mutationFn = (data) => api.post("auth/login", data);
-  
-    return useMutation({ mutationFn });
-  };
+  const mutationFn = (data) => api.post("auth/login", data);
 
-  const addProduct = data => api.post("products" , data)
+  return useMutation({ mutationFn });
+};
 
-  const deleteProduct = id => api.delete(`products/${id}`)
-   
+const addProduct = (data) => api.post("products", data);
 
-export { useRegister , useLogin , addProduct ,deleteProduct};
+const deleteProduct = (id) => api.delete(`products/${id}`);
+
+const updateProduct = ({id , ...data}) => api.put(`products/${id}` , data);
+
+export { useRegister, useLogin, addProduct, deleteProduct, updateProduct};

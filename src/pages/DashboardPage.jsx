@@ -16,7 +16,7 @@ import { deleteProduct } from "services/mutations";
 function DashboardPage() {
   const queryClient = useQueryClient();
   const [deleteModal, setDeleteModal] = useState({ show: false, id: "" });
-  const [addModal, setAddModal] = useState(false);
+  const [addModal, setAddModal] = useState({show : false , product : null});
   const { mutate } = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
@@ -39,8 +39,12 @@ function DashboardPage() {
 
   const showAddModal = (e) => {
     e.preventDefault();
-    setAddModal(true);
+    setAddModal({show : true , product:null});
   };
+  const showEditModal =(e , product)=>{
+    e.preventDefault();
+    setAddModal({show : true , product:product});
+  }
   const { isFetching, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -58,7 +62,7 @@ function DashboardPage() {
           confirmDelete={confirmDelete}
         />
       )}
-      {addModal && <AddModal setAddModal={setAddModal} />}
+      {addModal.show && <AddModal setAddModal={setAddModal} product={addModal.product}/>}
 
       <header>
         <div>
@@ -105,7 +109,7 @@ function DashboardPage() {
                 <td>{product.quantity}</td>
                 <td>{product.id}</td>
                 <td className={styles.oprations}>
-                  <a href="">
+                  <a onClick={(e) => showEditModal(e, product)}>
                     <BsPencilSquare color="#4ADE80" />
                   </a>
                   <a onClick={(e) => deleteHandler(e, product.id)}>
