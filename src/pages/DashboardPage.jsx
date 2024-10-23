@@ -6,6 +6,8 @@ import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
+import { FiMoreHorizontal } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 
 import { useState } from "react";
 
@@ -16,7 +18,18 @@ import { deleteProduct } from "services/mutations";
 function DashboardPage() {
   const queryClient = useQueryClient();
   const [deleteModal, setDeleteModal] = useState({ show: false, id: "" });
-  const [addModal, setAddModal] = useState({show : false , product : null});
+  const [addModal, setAddModal] = useState({ show: false, product: null });
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+ console.log(selectedProducts)
+  const productSelectHandler = (id) => {
+    setSelectedProducts((selected) =>
+      selected.includes(id)
+        ? selected.filter((productId) => productId !== id)
+        : [...selected, id]
+    );
+  };
+
   const { mutate } = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
@@ -39,12 +52,12 @@ function DashboardPage() {
 
   const showAddModal = (e) => {
     e.preventDefault();
-    setAddModal({show : true , product:null});
+    setAddModal({ show: true, product: null });
   };
-  const showEditModal =(e , product)=>{
+  const showEditModal = (e, product) => {
     e.preventDefault();
-    setAddModal({show : true , product:product});
-  }
+    setAddModal({ show: true, product: product });
+  };
   const { isFetching, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -62,10 +75,12 @@ function DashboardPage() {
           confirmDelete={confirmDelete}
         />
       )}
-      {addModal.show && <AddModal setAddModal={setAddModal} product={addModal.product}/>}
+      {addModal.show && (
+        <AddModal setAddModal={setAddModal} product={addModal.product} />
+      )}
 
       <header>
-        <div>
+        <div className={styles.search}>
           <BsSearch />
           <input type="text" placeholder="جستحو کالا" />
         </div>
@@ -100,14 +115,30 @@ function DashboardPage() {
               <th> موجودی</th>
               <th> قیمت</th>
               <th> شناسه کالا</th>
-              <th></th>
+              <th>
+                {!showCheckbox ? (
+                  <FiMoreHorizontal
+                    size="25px"
+                    onClick={() => setShowCheckbox(true)}
+                  />
+                ) : (
+                  <div className={styles.groupDelete}>
+                    <BsTrash size="20px" color="#F43F5E" />
+                    <IoCloseSharp
+                      size="20px"
+                      onClick={() => setShowCheckbox(false)}
+                      color="#862b3a"
+                    />
+                  </div>
+                )}
+              </th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => (
               <tr key={product.id}>
                 <td>{product.name}</td>
-                <td >{product.quantity}</td>
+                <td>{product.quantity}</td>
                 <td>{product.price}</td>
                 <td className={styles.id}>{product.id}</td>
                 <td className={styles.oprations}>
@@ -117,6 +148,14 @@ function DashboardPage() {
                   <a onClick={(e) => deleteHandler(e, product.id)}>
                     <BsTrash color="#F43F5E" />
                   </a>
+                  {showCheckbox && (
+                    <input
+                      type="checkbox"
+                      className={styles.checkbox}
+                      checked={selectedProducts.includes(product.id)}
+                      onChange={() => productSelectHandler(product.id)}
+                    />
+                  )}
                 </td>
               </tr>
             ))}
