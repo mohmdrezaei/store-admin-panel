@@ -10,17 +10,18 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
 
-
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
-import { deleteProduct , deleteProducts } from "services/mutations";
+import { deleteProduct, deleteProducts } from "services/mutations";
 import { toast } from "react-toastify";
-
-
 
 function DashboardPage() {
   const queryClient = useQueryClient();
-  const [deleteModal, setDeleteModal] = useState({ show: false, ids: [] });
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    message: "",
+    ids: [],
+  });
   const [addModal, setAddModal] = useState({ show: false, product: null });
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -38,31 +39,40 @@ function DashboardPage() {
     mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries("products");
-      setDeleteModal({show:false ,ids:[]});
-      showCheckbox ? toast.success("محصولات مورد نظر با موفقیت حذف شدند") :toast.success("محصول مورد نظر با موفقیت حذف شد");
+      setDeleteModal({ show: false, message: "", ids: [] });
+      showCheckbox
+        ? toast.success("محصولات مورد نظر با موفقیت حذف شدند")
+        : toast.success("محصول مورد نظر با موفقیت حذف شد");
     },
     onError: (error) => {
-      toast.success("مشکلی پیش آمده است:", error.response.data.message)
+      toast.success("مشکلی پیش آمده است:", error.response.data.message);
     },
   });
   const deleteHandler = (e, id) => {
     e.preventDefault();
     if (showCheckbox && selectedProducts.length === 0) {
-     toast.error("هیچ محصولی انتخاب نشده است!")
+      toast.error("هیچ محصولی انتخاب نشده است!");
       return;
     }
-    if (showCheckbox && selectedProducts.length > 0) {
-      setDeleteModal({ show: true, ids: selectedProducts });
+    if (showCheckbox && selectedProducts.length > 1) {
+      setDeleteModal({
+        show: true,
+        message: "آیا از حذف  این محصولات اطمینان دارید؟",
+        ids: selectedProducts,
+      });
     } else {
-      setDeleteModal({ show: true, ids: [id] });
+      setDeleteModal({
+        show: true,
+        message: "آیا از حذف این محصول مطمئنید؟",
+        ids: [id],
+      });
     }
   };
 
   const confirmDelete = () => {
-    if(selectedProducts.length > 1){
+    if (selectedProducts.length > 1) {
       mutate(selectedProducts);
-    }
-    else{
+    } else {
       mutate(deleteModal.ids);
     }
   };
@@ -90,6 +100,7 @@ function DashboardPage() {
         <DeleteModal
           setDeleteModal={setDeleteModal}
           confirmDelete={confirmDelete}
+          message={deleteModal.message}
         />
       )}
       {addModal.show && (

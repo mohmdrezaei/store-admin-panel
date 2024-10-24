@@ -1,7 +1,7 @@
 import close from "assets/close.png";
 import styles from "./DeleteModal.module.css";
 
-function DeleteModal({setDeleteModal,confirmDelete}) {
+function DeleteModal({setDeleteModal,confirmDelete , message}) {
 
 
   return (
@@ -9,7 +9,7 @@ function DeleteModal({setDeleteModal,confirmDelete}) {
       <div className={styles.modal}>
         <div className={styles.modalContent}>
           <img src={close} alt="" />
-          <p>آیا از حذف این محصول مطمئنید؟</p>
+          <p>{message}</p>
           <div className={styles.buttons}>
           <button className={styles.delete} onClick={confirmDelete}>حذف</button>
           <button
