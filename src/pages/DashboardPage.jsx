@@ -85,6 +85,11 @@ function DashboardPage() {
     e.preventDefault();
     setAddModal({ show: true, product: product });
   };
+
+  const closeHandler = ()=>{
+    setShowCheckbox(false);
+    setSelectedProducts([])
+  }
   const { isFetching, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -158,7 +163,7 @@ function DashboardPage() {
                     />
                     <IoCloseSharp
                       size="20px"
-                      onClick={() => setShowCheckbox(false)}
+                      onClick={closeHandler}
                       color="#862b3a"
                     />
                   </div>

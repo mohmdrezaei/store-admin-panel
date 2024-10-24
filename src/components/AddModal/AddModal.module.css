@@ -76,3 +76,12 @@
     color: #fff!important;
 
 }
+
+.errorMessage {
+    color: red;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    display: flex;
+}

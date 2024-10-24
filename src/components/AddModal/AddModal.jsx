@@ -4,9 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProduct } from "services/mutations";
 import { updateProduct } from "services/mutations";
 import { toast } from "react-toastify";
+
 function AddModal({ setAddModal, product }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
+  const [errors, setErrors] = useState({ name: "", quantity: "", price: "" });
 
   const mutationFn = product ? updateProduct : addProduct;
   const { mutate, isPending } = useMutation({
@@ -28,7 +30,18 @@ function AddModal({ setAddModal, product }) {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    if (!form.name || !form.quantity || !form.price) return;
+    const newErrors = {
+      name: !form.name ? "نام کالا الزامی است!" : "",
+      quantity: !form.quantity ? "تعداد را وارد کنید" : "",
+      price: !form.price ? "قیمت را وارد کنید" : "",
+      
+    };
+    if(newErrors){
+      setErrors(newErrors);
+      return;
+    }
+    
+
     if (product) {
       mutate({ id: product.id, ...form });
     } else {
@@ -60,6 +73,7 @@ function AddModal({ setAddModal, product }) {
                 value={form.name}
                 onChange={changeHandler}
               />
+              <span className={styles.errorMessage}>{errors.name && errors.name}</span>
             </div>
             <div className={styles.formControl}>
               <label htmlFor="quantity">تعداد موجودی</label>
@@ -70,6 +84,7 @@ function AddModal({ setAddModal, product }) {
                 value={form.quantity}
                 onChange={changeHandler}
               />
+              <span className={styles.errorMessage}>{errors.quantity && errors.quantity}</span>
             </div>
             <div className={styles.formControl}>
               <label htmlFor="price">قیمت</label>
@@ -80,6 +95,7 @@ function AddModal({ setAddModal, product }) {
                 value={form.price}
                 onChange={changeHandler}
               />
+              <span className={styles.errorMessage}>{errors.price && errors.price}</span>
             </div>
             <div className={styles.buttons}>
               <button type="submit" className={styles.add} disabled={isPending}>
