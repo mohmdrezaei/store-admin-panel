@@ -36,12 +36,13 @@ function AddModal({ setAddModal, product }) {
       price: !form.price ? "قیمت را وارد کنید" : "",
       
     };
-    if(newErrors){
+    
+    const hasErrors = Object.values(newErrors).some((error) => error !== '');
+
+    if (hasErrors) {
       setErrors(newErrors);
       return;
     }
-    
-
     if (product) {
       mutate({ id: product.id, ...form });
     } else {
