@@ -3,34 +3,25 @@ import styles from "./AddModal.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProduct } from "services/mutations";
 import { updateProduct } from "services/mutations";
+import { toast } from "react-toastify";
 function AddModal({ setAddModal, product }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
 
- const mutationFn = product ? updateProduct : addProduct;
+  const mutationFn = product ? updateProduct : addProduct;
   const { mutate, isPending } = useMutation({
     mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries("products");
-      setAddModal({show :false , product :null});
-      console.log("عملیات با موفقیت انجام شد");
+      setAddModal({ show: false, product: null });
+      toast.success(
+        product ? "محصول با موفقیت ویرایش شد!" : "محصول با موفقیت افزوده شد!"
+      );
     },
     onError: (error) => {
-      console.log("مشکلی پیش آمده است:", error.response.data.message);
+      toast.error("مشکلی پیش آمده است:", error.response.data.message);
     },
   });
-
-  const updatemutation = useMutation({
-    mutationFn: updateProduct,
-    onSuccess: () => {
-      queryClient.invalidateQueries("products");
-      setAddModal({show :false , product :null});
-      console.log("محصول با موفقیت ویرایش شد");
-    },
-    onError: (error) => {
-      console.log("مشکلی پیش آمده است:", error.response.data.message);
-    },
-  })
 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,9 +29,9 @@ function AddModal({ setAddModal, product }) {
   const submitHandler = (e) => {
     e.preventDefault();
     if (!form.name || !form.quantity || !form.price) return;
-    if(product) {
-      mutate({id: product.id,  ...form})
-    }else {
+    if (product) {
+      mutate({ id: product.id, ...form });
+    } else {
       mutate(form);
     }
   };

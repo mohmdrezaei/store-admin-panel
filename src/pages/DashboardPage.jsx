@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "services/queries";
 
@@ -9,12 +10,13 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
 
-import { useState } from "react";
 
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
-import { deleteProduct } from "services/mutations";
-import { deleteProducts } from "services/mutations";
+import { deleteProduct , deleteProducts } from "services/mutations";
+import { toast } from "react-toastify";
+
+
 
 function DashboardPage() {
   const queryClient = useQueryClient();
@@ -37,16 +39,16 @@ function DashboardPage() {
     onSuccess: () => {
       queryClient.invalidateQueries("products");
       setDeleteModal({show:false ,ids:[]});
-      showCheckbox ? console.log("محصولات مورد نظر با موفقیت حذف شدند") :console.log("محصول با موفقیت حذف شد");
+      showCheckbox ? toast.success("محصولات مورد نظر با موفقیت حذف شدند") :toast.success("محصول مورد نظر با موفقیت حذف شد");
     },
     onError: (error) => {
-      console.log("مشکلی پیش آمده است:", error.response.data.message);
+      toast.success("مشکلی پیش آمده است:", error.response.data.message)
     },
   });
   const deleteHandler = (e, id) => {
     e.preventDefault();
-    if (selectedProducts.length === 0) {
-     alert ("هیچ محصولی انتخاب نشده است!")
+    if (showCheckbox && selectedProducts.length === 0) {
+     toast.error("هیچ محصولی انتخاب نشده است!")
       return;
     }
     if (showCheckbox && selectedProducts.length > 0) {
@@ -61,7 +63,7 @@ function DashboardPage() {
       mutate(selectedProducts);
     }
     else{
-      mutate(deleteModal.id);
+      mutate(deleteModal.ids);
     }
   };
 

@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "pages/LoginPage";
 import RegisterPage from "pages/RegisterPage";
-import {
-  BrowserRouter,
-  Navigate,
-  redirect,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import PageNotFound from "pages/404";
 import { getCookie } from "utils/cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -62,6 +58,14 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        rtl={true}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

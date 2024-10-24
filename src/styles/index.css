@@ -28,3 +28,11 @@ input,
 select {
   font-family: inherit;
 }
+
+.Toastify__toast-body {
+  font-family: 'Vazir';
+}
+
+.Toastify__toast-container {
+  width: fit-content;
+}
