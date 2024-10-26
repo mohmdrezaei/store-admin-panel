@@ -1,5 +1,8 @@
 import api from "configs/api"
 
-const getProducts = ()=> api.get("products")
+const getProducts = (options={})=>{
+    const {page } =options
+   return api.get(`products?page=${page}&limit=10`)
+}
 
 export { getProducts}

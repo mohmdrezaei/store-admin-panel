@@ -1,13 +1,16 @@
 
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import styles from "./AuthPage.module.css"
 import logo from "assets/Union.png"
 import { useRegister } from "services/mutations";
+import { toast } from "react-toastify";
 
 function RegisterPage({ formData, setFormData }) {
   const navigate = useNavigate();
   const  {mutate} = useRegister()
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -18,11 +21,9 @@ function RegisterPage({ formData, setFormData }) {
   };
 
   const submitHandler = async (e) => {
-    e.preventDefault();
     const { username, password, confirmPassword } = formData;
-      if(!username || !password) return alert("نام کاربری و رمز عبور الزامی است!")
     if (password !== confirmPassword) {
-      alert("گذرواژه ها مطابقت ندارند. لطفا دوباره امتحان کنید.");
+      toast.error("گذرواژه ها مطابقت ندارند. لطفا دوباره امتحان کنید.")
       return;
     }
 
@@ -34,7 +35,7 @@ function RegisterPage({ formData, setFormData }) {
           navigate("/login");
         },
         onError: (error) => {
-          console.log("ثبت نام با مشکل ربرو شد!:", error.response.data.message);
+         toast.error("ثبت نام با مشکل روبرو شد")
         },
       }
     )
@@ -45,29 +46,28 @@ function RegisterPage({ formData, setFormData }) {
     <div className={styles.auth}>
       <img src={logo} alt="" />
       <h1>فرم ثبت نام</h1>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={handleSubmit(submitHandler)} onChange={changeHandler}>
         <input
           type="text"
           name="username"
           placeholder="نام کاربری"
-          value={formData.username}
-          onChange={changeHandler}
           className={styles.input}
+          id="username"
+          {...register('username', { required: true})} 
         />
+        
         <input
           type="password"
           name="password"
           placeholder="رمز عبور"
-          value={formData.password}
-          onChange={changeHandler}
           className={styles.input}
+          {...register('password', { required: true})} 
         />
+         {errors.password && errors.password.type === "required" && <span>پسورد الزامی است</span>}
         <input
           type="password"
           name="confirmPassword"
           placeholder="تکرار رمز عبور"
-          value={formData.confirmPassword}
-          onChange={changeHandler}
           className={styles.input}
         />
         <button type="submit">ثبت نام</button>

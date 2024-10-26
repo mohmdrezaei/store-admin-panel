@@ -14,9 +14,11 @@ import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
 import { deleteProduct, deleteProducts } from "services/mutations";
 import { toast } from "react-toastify";
+import Pagination from "components/Pagination";
 
 function DashboardPage() {
   const queryClient = useQueryClient();
+  const [page ,  setPage]= useState(1)
   const [deleteModal, setDeleteModal] = useState({
     show: false,
     message: "",
@@ -91,8 +93,8 @@ function DashboardPage() {
     setSelectedProducts([])
   }
   const { isFetching, error, data } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts,
+    queryKey: ["products" , page],
+    queryFn: ()=>getProducts ({page}),
   });
 
   if (isFetching) return <div>Loading...</div>;
@@ -100,7 +102,9 @@ function DashboardPage() {
   if (error) return "An error has occurred: " + error.message;
   const products = data.data.data;
   return (
+    
     <div className={styles.container}>
+      <Pagination page={page} setPage={setPage} pages={data.data.totalPages}/>
       {deleteModal.show && (
         <DeleteModal
           setDeleteModal={setDeleteModal}

@@ -4,11 +4,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProduct } from "services/mutations";
 import { updateProduct } from "services/mutations";
 import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 
 function AddModal({ setAddModal, product }) {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
-  const [errors, setErrors] = useState({ name: "", quantity: "", price: "" });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
   const mutationFn = product ? updateProduct : addProduct;
   const { mutate, isPending } = useMutation({
@@ -28,27 +34,14 @@ function AddModal({ setAddModal, product }) {
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const newErrors = {
-      name: !form.name ? "نام کالا الزامی است!" : "",
-      quantity: !form.quantity ? "تعداد را وارد کنید" : "",
-      price: !form.price ? "قیمت را وارد کنید" : "",
-      
-    };
-    
-    const hasErrors = Object.values(newErrors).some((error) => error !== '');
-
-    if (hasErrors) {
-      setErrors(newErrors);
-      return;
-    }
+  const submitHandler = () => {
     if (product) {
       mutate({ id: product.id, ...form });
     } else {
       mutate(form);
     }
   };
+
 
   useEffect(() => {
     if (product) {
@@ -57,6 +50,9 @@ function AddModal({ setAddModal, product }) {
         quantity: product.quantity,
         price: product.price,
       });
+      setValue("name", product.name);
+      setValue("quantity", product.quantity);
+      setValue("price", product.price);
     }
   }, [product]);
   return (
@@ -64,7 +60,7 @@ function AddModal({ setAddModal, product }) {
       <div className={styles.modal}>
         <div className={styles.modalContent}>
           <h2>{product ? "ویرایش اطلاعات" : "ایجاد محصول جدید"}</h2>
-          <form onSubmit={submitHandler}>
+          <form onSubmit={handleSubmit(submitHandler)} onChange={changeHandler}>
             <div className={styles.formControl}>
               <label htmlFor="name">نام کالا</label>
               <input
@@ -73,8 +69,12 @@ function AddModal({ setAddModal, product }) {
                 placeholder="نام کالا"
                 value={form.name}
                 onChange={changeHandler}
+                id="name"
+                {...register("name", { required: true })}
               />
-              <span className={styles.errorMessage}>{errors.name && errors.name}</span>
+              {errors.name && errors.name.type === "required" && (
+                <span className={styles.error}>نام کالا الزامی است!</span>
+              )}
             </div>
             <div className={styles.formControl}>
               <label htmlFor="quantity">تعداد موجودی</label>
@@ -83,9 +83,13 @@ function AddModal({ setAddModal, product }) {
                 name="quantity"
                 placeholder="تعداد موجودی"
                 value={form.quantity}
-                onChange={changeHandler}
+                onChange={(e) => se}
+                id="quantity"
+                {...register("quantity", { required: true })}
               />
-              <span className={styles.errorMessage}>{errors.quantity && errors.quantity}</span>
+              {errors.quantity && errors.quantity.type === "required" && (
+                <span className={styles.error}>تعداد را وارد کنید!</span>
+              )}
             </div>
             <div className={styles.formControl}>
               <label htmlFor="price">قیمت</label>
@@ -93,15 +97,34 @@ function AddModal({ setAddModal, product }) {
                 type="text"
                 name="price"
                 placeholder="قیمت"
+                id="price"
                 value={form.price}
                 onChange={changeHandler}
+                {...register("price", { required: true })}
               />
-              <span className={styles.errorMessage}>{errors.price && errors.price}</span>
+              {errors.price && errors.price.type === "required" && (
+                <span className={styles.error}>قیمت را وارد کنید!</span>
+              )}
             </div>
             <div className={styles.buttons}>
-              <button type="submit" className={styles.add} disabled={isPending}>
-                {product ? "ثبت اطلاعات جدید" : "ایجاد"}
-              </button>
+              {product ? (
+                <button
+                  type="submit"
+                  className={styles.add}
+                  disabled={isPending}
+                >
+                  ایجاد
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className={styles.add}
+                  disabled={isPending}
+                >
+                  ثبت اطلاعات جدید
+                </button>
+              )}
+
               <button
                 className={styles.cancel}
                 onClick={() => setAddModal(false)}
