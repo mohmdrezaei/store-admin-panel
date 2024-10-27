@@ -1,10 +1,16 @@
+import { json, useSearchParams } from "react-router-dom";
 import styles from "./Pagination.module.css"
+import { useEffect } from "react";
 
 function Pagination({page , setPage, pages}) {
+  const [searchParams , setSearchParams] = useSearchParams();
   
-
+  useEffect(() => {
+    setPage(JSON.parse(searchParams.get('page')) || 1);
+  }, [searchParams]);
   const handlePageClick = (pageNumber) => {
     setPage(pageNumber);
+    setSearchParams({page : pageNumber});
   };
   const pageNumbers = [];
   for (let i = 1; i <= pages; i++) {

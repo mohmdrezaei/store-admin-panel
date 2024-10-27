@@ -29,12 +29,12 @@ function RegisterPage({ formData, setFormData }) {
 
     mutate({username , password},
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           toast.success("ثبت نام با موفقیت انجام شد!")
           setFormData({ username: "", password: "" });
           navigate("/login");
         },
-        onError: (error) => {
+        onError: () => {
          toast.error("ثبت نام با مشکل روبرو شد")
         },
       }

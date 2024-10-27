@@ -15,10 +15,13 @@ import AddModal from "components/AddModal/AddModal";
 import { deleteProduct, deleteProducts } from "services/mutations";
 import { toast } from "react-toastify";
 import Pagination from "components/pagination/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 function DashboardPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
+ 
+   
   const [deleteModal, setDeleteModal] = useState({
     show: false,
     message: "",
@@ -27,7 +30,6 @@ function DashboardPage() {
   const [addModal, setAddModal] = useState({ show: false, product: null });
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  console.log(selectedProducts);
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -93,7 +95,7 @@ function DashboardPage() {
     setSelectedProducts([]);
   };
   const { isFetching, error, data } = useQuery({
-    queryKey: ["products", page],
+    queryKey: ["products", page ],
     queryFn: () => getProducts({ page }),
   });
 

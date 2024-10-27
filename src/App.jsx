@@ -11,6 +11,7 @@ import {
   Route,
   Routes,
   useNavigate,
+  useSearchParams,
 } from "react-router-dom";
 import PageNotFound from "pages/404";
 import { getCookie } from "utils/cookie";
@@ -38,7 +39,7 @@ function App() {
     confirmPassword: "",
   });
   const token = getCookie("token");
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -51,6 +52,7 @@ function App() {
               ) : (
                 <Navigate to="/dashboard" />
               )
+              
             }
           />
           <Route
