@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./AddModal.module.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addProduct } from "services/mutations";
-import { updateProduct } from "services/mutations";
+
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
+import { useAddProduct } from "services/mutations";
 
 function AddModal({ setAddModal, product }) {
-  const queryClient = useQueryClient();
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
   const {
     register,
@@ -16,20 +15,8 @@ function AddModal({ setAddModal, product }) {
     setValue,
   } = useForm();
 
-  const mutationFn = product ? updateProduct : addProduct;
-  const { mutate, isPending } = useMutation({
-    mutationFn,
-    onSuccess: () => {
-      queryClient.invalidateQueries("products");
-      setAddModal({ show: false, product: null });
-      toast.success(
-        product ? "محصول با موفقیت ویرایش شد!" : "محصول با موفقیت افزوده شد!"
-      );
-    },
-    onError: (error) => {
-      toast.error("مشکلی پیش آمده است:", error.response.data.message);
-    },
-  });
+
+  const { mutate, isPending } = useAddProduct(setAddModal);
 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
