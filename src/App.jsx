@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "pages/LoginPage";
 import RegisterPage from "pages/RegisterPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import PageNotFound from "pages/404";
 import { getCookie } from "utils/cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ProtectedRoutes from "router/ProtectedRoutes";
+
+
 
 function App() {
   const queryClient = new QueryClient({
@@ -37,7 +46,11 @@ function App() {
           <Route
             path="/register"
             element={
-              <RegisterPage formData={formData} setFormData={setFormData} />
+              !token ? (
+                <RegisterPage formData={formData} setFormData={setFormData} />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
             }
           />
           <Route
@@ -51,11 +64,11 @@ function App() {
             }
           />
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route
-            path="/dashboard"
-            element={token ? <DashboardPage /> : <Navigate to="/login" />}
-          />
-          <Route path="*" element={<PageNotFound />} />
+        
+         <Route  element={<ProtectedRoutes/>}>
+         <Route path="/dashboard" element={ <DashboardPage/>}/>
+           
+          </Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer

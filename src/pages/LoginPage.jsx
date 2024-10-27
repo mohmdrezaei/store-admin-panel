@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import styles from "./AuthPage.module.css";
 import logo from "assets/Union.png";
 import { useLogin } from "services/mutations";
+import { toast } from "react-toastify";
 
 function LoginPage({ formData, setFormData }) {
   const navigate = useNavigate();
@@ -25,12 +26,12 @@ function LoginPage({ formData, setFormData }) {
       { username, password },
       {
         onSuccess: (data) => {
-          console.log("ورود با موفقیت انجام شد:", data.data);
+         toast.success("خوش آمدید!")
           setCookie("token",data?.data.token);
           navigate("/dashboard");
         },
-        onError: (error) => {
-          console.log("ثبت نام با مشکل ربرو شد!:", error.response.data.message);
+        onError: () => {
+          toast.error("ورود با مشکل روبرو شد")
         },
       }
     );

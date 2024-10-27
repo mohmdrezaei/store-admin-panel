@@ -30,7 +30,7 @@ function RegisterPage({ formData, setFormData }) {
     mutate({username , password},
       {
         onSuccess: (data) => {
-          console.log("ثبت نام با موفقیت انجام شد:", data.data.message);
+          toast.success("ثبت نام با موفقیت انجام شد!")
           setFormData({ username: "", password: "" });
           navigate("/login");
         },
