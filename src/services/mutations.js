@@ -34,7 +34,18 @@ const deleteProduct = (id) => {
   return useMutation({ mutationFn });
 };
 
-const updateProduct = ({ id, ...data }) => api.put(`products/${id}`, data);
+const useUpdateProduct = (setAddModal) =>{ 
+  const queryClient = useQueryClient();
+  const mutationFn =({id , ...data})=> api.put(`products/${id}`, data);
+
+  const onSuccess = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["products"] });
+    setAddModal({ show: false, product: null });
+      toast.success("محصول با موفقیت ویرایش شد!");
+  };
+  return useMutation({ mutationFn, onSuccess });
+ 
+};
 const deleteProducts = (ids) => api.delete("/products", { data: { ids } });
 
 export {
@@ -42,6 +53,6 @@ export {
   useLogin,
   useAddProduct,
   deleteProduct,
-  updateProduct,
+  useUpdateProduct,
   deleteProducts,
 };

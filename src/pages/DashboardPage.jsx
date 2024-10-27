@@ -21,18 +21,18 @@ import { useGetProducts } from "services/queries";
 function DashboardPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
- 
-   
   const [deleteModal, setDeleteModal] = useState({
     show: false,
     message: "",
     ids: [],
   });
+
   const [addModal, setAddModal] = useState({ show: false, product: null });
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   const { isFetching, error, data } = useGetProducts(page)
+
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -41,15 +41,15 @@ function DashboardPage() {
     );
   };
   const mutationFn =
-    selectedProducts.length > 1 ? deleteProducts : deleteProduct;
+  selectedProducts.length > 1 ? deleteProducts : deleteProduct;
   const { mutate } = useMutation({
     mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries("products");
       setDeleteModal({ show: false, message: "", ids: [] });
-      showCheckbox
-        ? toast.success("محصولات مورد نظر با موفقیت حذف شدند")
-        : toast.success("محصول مورد نظر با موفقیت حذف شد");
+      
+       toast.success("محصولات مورد نظر با موفقیت حذف شدند")
+       toast.success("محصول مورد نظر با موفقیت حذف شد");
     },
     onError: (error) => {
       toast.error("مشکلی پیش آمده است");

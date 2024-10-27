@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./AddModal.module.css";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useAddProduct } from "services/mutations";
+import { useAddProduct, useUpdateProduct } from "services/mutations";
 
 function AddModal({ setAddModal, product }) {
   const [form, setForm] = useState({ name: "", quantity: "", price: "" });
@@ -15,8 +12,9 @@ function AddModal({ setAddModal, product }) {
     setValue,
   } = useForm();
 
-
-  const { mutate, isPending } = useAddProduct(setAddModal);
+  const { mutate, isPending } = product
+    ? useUpdateProduct(setAddModal)
+    : useAddProduct(setAddModal);
 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,7 +26,6 @@ function AddModal({ setAddModal, product }) {
       mutate(form);
     }
   };
-
 
   useEffect(() => {
     if (product) {
@@ -100,7 +97,7 @@ function AddModal({ setAddModal, product }) {
                   className={styles.add}
                   disabled={isPending}
                 >
-                  ایجاد
+                  ثبت اطلاعات جدید
                 </button>
               ) : (
                 <button
@@ -108,7 +105,7 @@ function AddModal({ setAddModal, product }) {
                   className={styles.add}
                   disabled={isPending}
                 >
-                  ثبت اطلاعات جدید
+                  ایجاد
                 </button>
               )}
 
