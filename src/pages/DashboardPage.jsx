@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-
 import styles from "./DashboardPage.module.css";
 import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
@@ -12,14 +11,13 @@ import { IoCloseSharp } from "react-icons/io5";
 
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
-import { deleteProduct, deleteProducts } from "services/mutations";
 import { toast } from "react-toastify";
 import Pagination from "components/pagination/Pagination";
-import { useSearchParams } from "react-router-dom";
 import { useGetProducts } from "services/queries";
+import { useDeleteProduct } from "services/mutations";
+import { useDeleteProducts } from "services/mutations";
 
 function DashboardPage() {
-  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [deleteModal, setDeleteModal] = useState({
     show: false,
@@ -31,7 +29,12 @@ function DashboardPage() {
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const { isFetching, error, data } = useGetProducts(page)
+  const { isFetching, error, data } = useGetProducts(page);
+  
+  const { mutate } =
+    selectedProducts.length > 1
+      ? useDeleteProducts(setDeleteModal)
+      : useDeleteProduct(setDeleteModal);
 
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
@@ -40,21 +43,8 @@ function DashboardPage() {
         : [...selected, id]
     );
   };
-  const mutationFn =
-  selectedProducts.length > 1 ? deleteProducts : deleteProduct;
-  const { mutate } = useMutation({
-    mutationFn,
-    onSuccess: () => {
-      queryClient.invalidateQueries("products");
-      setDeleteModal({ show: false, message: "", ids: [] });
-      
-       toast.success("محصولات مورد نظر با موفقیت حذف شدند")
-       toast.success("محصول مورد نظر با موفقیت حذف شد");
-    },
-    onError: (error) => {
-      toast.error("مشکلی پیش آمده است");
-    },
-  });
+
+
   const deleteHandler = (e, id) => {
     e.preventDefault();
     if (showCheckbox && selectedProducts.length === 0) {
@@ -97,7 +87,6 @@ function DashboardPage() {
     setShowCheckbox(false);
     setSelectedProducts([]);
   };
-  
 
   if (isFetching) return <div>Loading...</div>;
 
