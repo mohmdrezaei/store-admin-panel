@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProducts } from "services/queries";
+
 
 import styles from "./DashboardPage.module.css";
 import { BsTrash } from "react-icons/bs";
@@ -16,6 +16,7 @@ import { deleteProduct, deleteProducts } from "services/mutations";
 import { toast } from "react-toastify";
 import Pagination from "components/pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
+import { useGetProducts } from "services/queries";
 
 function DashboardPage() {
   const queryClient = useQueryClient();
@@ -30,6 +31,8 @@ function DashboardPage() {
   const [addModal, setAddModal] = useState({ show: false, product: null });
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const { isFetching, error, data } = useGetProducts(page)
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -49,7 +52,7 @@ function DashboardPage() {
         : toast.success("محصول مورد نظر با موفقیت حذف شد");
     },
     onError: (error) => {
-      toast.success("مشکلی پیش آمده است:", error.response.data.message);
+      toast.error("مشکلی پیش آمده است");
     },
   });
   const deleteHandler = (e, id) => {
@@ -94,10 +97,7 @@ function DashboardPage() {
     setShowCheckbox(false);
     setSelectedProducts([]);
   };
-  const { isFetching, error, data } = useQuery({
-    queryKey: ["products", page ],
-    queryFn: () => getProducts({ page }),
-  });
+  
 
   if (isFetching) return <div>Loading...</div>;
 

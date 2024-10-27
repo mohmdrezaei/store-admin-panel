@@ -26,7 +26,7 @@ function LoginPage({ formData, setFormData }) {
       { username, password },
       {
         onSuccess: (data) => {
-         toast.success("خوش آمدید!")
+         toast.success("ورود با موفقیت انجام شد! خوش آمدید")
           setCookie("token",data?.data.token);
           navigate("/dashboard");
         },

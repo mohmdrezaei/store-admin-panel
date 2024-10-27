@@ -1,9 +1,11 @@
+import { useQuery } from "@tanstack/react-query"
 import api from "configs/api"
 
-const getProducts = (options={})=>{
+const useGetProducts = (page)=>{
+    const queryFn =()=> api.get(`products?page=${page}&limit=10`)
+    const queryKey = ["products" , page]
     
-    const {page } =options
-   return api.get(`products?page=${page}&limit=10`)
+   return useQuery({queryFn ,queryKey })
 }
 
-export { getProducts}
+export { useGetProducts}

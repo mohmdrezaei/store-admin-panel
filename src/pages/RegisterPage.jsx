@@ -55,7 +55,7 @@ function RegisterPage({ formData, setFormData }) {
           id="username"
           {...register('username', { required: true})} 
         />
-        
+         {errors.username && errors.username.type === "required" && <span>نام کاربری الزامی است</span>}
         <input
           type="password"
           name="password"
