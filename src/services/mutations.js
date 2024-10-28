@@ -21,7 +21,10 @@ const useAddProduct = (setAddModal) => {
     setAddModal({ show: false, product: null });
     toast.success("محصول با موفقیت افزوده شد!");
   };
-  return useMutation({ mutationFn, onSuccess });
+  const onError =() => {
+    toast.error("مشکلی پیش آمده است")
+   }
+  return useMutation({ mutationFn, onSuccess , onError });
 };
 
 const useUpdateProduct = (setAddModal) => {
@@ -33,7 +36,10 @@ const useUpdateProduct = (setAddModal) => {
     setAddModal({ show: false, product: null });
     toast.success("محصول با موفقیت ویرایش شد!");
   };
-  return useMutation({ mutationFn, onSuccess });
+  const onError =() => {
+    toast.error("مشکلی پیش آمده است")
+   }
+  return useMutation({ mutationFn, onSuccess ,onError });
 };
 
 const useDeleteProduct = (setDeleteModal) => {
@@ -46,7 +52,10 @@ const useDeleteProduct = (setDeleteModal) => {
     setDeleteModal({ show: false, message: "", ids: [] });
     toast.success("محصول مورد نظر با موفقیت حذف شد");
   };
-  return useMutation({ mutationFn, onSuccess });
+  const onError =() => {
+    toast.error("مشکلی پیش آمده است")
+   }
+  return useMutation({ mutationFn, onSuccess ,onError });
 };
 
 const useDeleteProducts = (setDeleteModal) => {
@@ -59,7 +68,10 @@ const useDeleteProducts = (setDeleteModal) => {
     setDeleteModal({ show: false, message: "", ids: [] });
     toast.success("محصولات مورد نظر با موفقیت حذف شدند");
   };
-  return useMutation({ mutationFn, onSuccess });
+  const onError =() => {
+    toast.error("مشکلی پیش آمده است")
+   }
+  return useMutation({ mutationFn, onSuccess, onError });
 };
 
 export {
