@@ -1,6 +1,5 @@
 import { jwtDecode } from "jwt-decode";
 
-
 function getUserInfoFromToken(token) {
         try {
           const decodedToken = jwtDecode(token);

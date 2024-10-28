@@ -1,12 +1,11 @@
-import ProtectedRoutes from "router/ProtectedRoutes";
 import { useState } from "react";
-import { getCookie } from "utils/cookie";
 import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
 import ProductsPage from "pages/ProductsPage";
 import PageNotFound from "pages/404";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
+import ProtectedRoutes from "router/ProtectedRoutes";
 
 function Router() {
   const [formData, setFormData] = useState({
@@ -14,8 +13,6 @@ function Router() {
     password: "",
     confirmPassword: "",
   });
-
-  const token = getCookie("token");
   return (
     <BrowserRouter>
       <Routes>
