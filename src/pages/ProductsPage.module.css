@@ -131,6 +131,6 @@
 @media (max-width: 800px) {
     .table {
         display: block;
-        overflow-x: scroll;
+        overflow-x: scroll; 
     }
 }
