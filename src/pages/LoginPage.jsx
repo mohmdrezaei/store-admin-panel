@@ -28,7 +28,7 @@ function LoginPage({ formData, setFormData }) {
         onSuccess: (data) => {
          toast.success("ورود با موفقیت انجام شد! خوش آمدید")
           setCookie("token",data?.data.token);
-          navigate("/dashboard");
+          navigate("/products");
         },
         onError: () => {
           toast.error("ورود با مشکل روبرو شد")

@@ -34,6 +34,10 @@
     margin: 10px;
     gap: 5px;
 }
+.user svg {
+    margin-right: 20px;
+    cursor: pointer;
+}
 
 .add {
     display: flex;
@@ -65,6 +69,7 @@
     border: 1px solid #E4E4E4;
     overflow: hidden;
     font-size: 14px;
+    margin-bottom: 50px;
 }
 
 .table th {

@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import styles from "./DashboardPage.module.css";
 import { BsTrash } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
+import { CiLogout } from "react-icons/ci";
+import styles from "./ProductsPage.module.css";
 
 import DeleteModal from "components/DeleteModal/DeleteModal";
 import AddModal from "components/AddModal/AddModal";
@@ -17,7 +17,11 @@ import { useGetProducts } from "services/queries";
 import { useDeleteProduct } from "services/mutations";
 import { useDeleteProducts } from "services/mutations";
 
-function DashboardPage() {
+import { deleteCookie } from "utils/cookie";
+import { useNavigate } from "react-router-dom";
+
+function ProductsPage() {
+  const navigate = useNavigate()
   const [page, setPage] = useState(1);
   const [deleteModal, setDeleteModal] = useState({
     show: false,
@@ -73,6 +77,10 @@ function DashboardPage() {
       mutate(deleteModal.ids);
     }
   };
+  const logoutHandler = ()=>{
+    deleteCookie("token");
+    navigate("/login");
+  }
 
   const showAddModal = (e) => {
     e.preventDefault();
@@ -116,7 +124,10 @@ function DashboardPage() {
           <div>
             <p>محمد رضایی</p>
             <span>مدیر</span>
+           
           </div>
+          < CiLogout size="27px" title="خروج" onClick={logoutHandler}/>
+          
         </div>
       </header>
 
@@ -203,4 +214,4 @@ function DashboardPage() {
   );
 }
 
-export default DashboardPage;
+export default ProductsPage;
