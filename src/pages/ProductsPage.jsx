@@ -21,6 +21,9 @@ import { deleteCookie } from "utils/cookie";
 import { useNavigate } from "react-router-dom";
 import Loader from "components/modules/Loader";
 import ProductsList from "components/productsList/ProductsList";
+import getUserInfoFromToken from "services/userInfo";
+import { getCookie } from "utils/cookie";
+
 
 function ProductsPage() {
   const navigate = useNavigate();
@@ -41,7 +44,9 @@ function ProductsPage() {
     selectedProducts.length > 1
       ? useDeleteProducts(setDeleteModal)
       : useDeleteProduct(setDeleteModal);
-
+    const token = getCookie("token");
+    const userInfo = getUserInfoFromToken(token);
+      
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -124,7 +129,7 @@ function ProductsPage() {
         <div className={styles.user}>
           <img src="src/assets/profile.png" alt="" />
           <div>
-            <p>محمد رضایی</p>
+            <p>{userInfo.username}</p>
             <span>مدیر</span>
           </div>
           <CiLogout size="27px" title="خروج" onClick={logoutHandler} />
