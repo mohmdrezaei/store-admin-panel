@@ -1,6 +1,7 @@
 .container {
     width: 1140px;
     margin: auto;
+    
 }
 
 .container header {
@@ -67,7 +68,6 @@
     border-collapse: collapse;
     border-radius: 30px;
     border: 1px solid #E4E4E4;
-    overflow: hidden;
     font-size: 14px;
     margin-bottom: 50px;
 }
@@ -80,15 +80,11 @@
 
 }
 
-
-
-
 .table tbody tr {
     height: 60px;
     background-color: #fff;
     border-bottom: 1px solid #F2F2F2;
     color: #282828;
-
 }
 
 .table tr td:nth-child(1) {
@@ -122,4 +118,19 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        width: 100%;
+    }
+
+    
+}
+
+@media (max-width: 800px) {
+    .table {
+        display: block;
+        overflow-x: scroll;
+    }
 }

@@ -19,6 +19,7 @@ import { useDeleteProducts } from "services/mutations";
 
 import { deleteCookie } from "utils/cookie";
 import { useNavigate } from "react-router-dom";
+import Loader from "components/modules/Loader";
 
 function ProductsPage() {
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ function ProductsPage() {
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const { isFetching, error, data } = useGetProducts(page);
+  const { isLoading, error, data , isPending } = useGetProducts(page);
   
   const { mutate } =
     selectedProducts.length > 1
@@ -96,10 +97,11 @@ function ProductsPage() {
     setSelectedProducts([]);
   };
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isLoading) return <Loader/>;
 
   if (error) return "An error has occurred: " + error.message;
-  const products = data.data.data;
+  const products = data?.data?.data || [];;
+  console.log(data?.data)
   return (
     <div className={styles.container}>
       {deleteModal.show && (
@@ -142,7 +144,7 @@ function ProductsPage() {
         </div>
       </div>
 
-      {isFetching ? (
+      {isPending ? (
         <p>Loding...</p>
       ) : (
         <table className={styles.table}>
