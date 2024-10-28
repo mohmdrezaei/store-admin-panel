@@ -86,6 +86,9 @@
     border-bottom: 1px solid #F2F2F2;
     color: #282828;
 }
+.table tbody tr:hover {
+    background-color: #F9F9F9;
+}
 
 .table tr td:nth-child(1) {
     width: 20%;

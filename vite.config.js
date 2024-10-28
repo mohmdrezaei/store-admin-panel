@@ -12,7 +12,8 @@ const paths = [
   "services",
   "styles",
   "utils",
-  "hooks"
+  "hooks",
+  "provider"
 ];
 // https://vitejs.dev/config/
 export default defineConfig({

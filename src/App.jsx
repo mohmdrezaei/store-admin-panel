@@ -6,8 +6,9 @@ import LoginPage from "pages/LoginPage";
 import RegisterPage from "pages/RegisterPage";
 import PageNotFound from "pages/404";
 
+
+import TanstackQueryProvider from "provider/TanstackQueryProvider";
 import { getCookie } from "utils/cookie";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ProtectedRoutes from "router/ProtectedRoutes";
 import {
@@ -21,17 +22,7 @@ import {
 
 
 function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        retry: 1,
-        staleTime: 60 * 1000,
-        cacheTime: 60 * 1000,
-      },
-    },
-  });
+  
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -40,7 +31,7 @@ function App() {
   const token = getCookie("token");
   
   return (
-    <QueryClientProvider client={queryClient}>
+    <TanstackQueryProvider>
       <BrowserRouter>
         <Routes>
           <Route
@@ -80,7 +71,7 @@ function App() {
         theme="light"
       />
       <ReactQueryDevtools />
-    </QueryClientProvider>
+      </TanstackQueryProvider>
   );
 }
 
