@@ -36,7 +36,7 @@ function ProductsPage() {
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const { isLoading, error, data, isPending } = useGetProducts(page);
+  const { isLoading, data, error, isPending } = useGetProducts(page);
 
   const { mutate } =
     selectedProducts.length > 1
@@ -98,10 +98,11 @@ function ProductsPage() {
     setSelectedProducts([]);
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading ) return <Loader />;
 
-  if (error) return "محصولی یافت نشد " ;
-  const products = data?.data?.data || [];
+  if (error ) return <div>هیچ محصولی وجود ندارد</div>
+  const products = data?.data;
+ 
 
   return (
     <div className={styles.container}>
@@ -177,25 +178,33 @@ function ProductsPage() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
-              <ProductsList
-                key={product.id}
-                product={product}
-                selectedProducts={selectedProducts}
-                productSelectHandler={productSelectHandler}
-                showCheckbox={showCheckbox}
-                deleteHandler={deleteHandler}
-                showEditModal={showEditModal}
-              />
-            ))}
+          {products.length > 0  ? (
+              products?.map((product) => (
+                <ProductsList
+                  key={product.id}
+                  product={product}
+                  selectedProducts={selectedProducts}
+                  productSelectHandler={productSelectHandler}
+                  showCheckbox={showCheckbox}
+                  deleteHandler={deleteHandler}
+                  showEditModal={showEditModal}
+                />
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: 'center', color: 'red' }}>
+                  هیچ محصولی وجود ندارد.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}
-      {data.data.totalPages > 1 && (
+      {data.totalPages > 1 && (
         <Pagination
           page={page}
           setPage={setPage}
-          pages={data.data.totalPages}
+          pages={data.totalPages}
         />
       )}
     </div>
