@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { BsTrash } from "react-icons/bs";
-import { BsPencilSquare } from "react-icons/bs";
+
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { FiMoreHorizontal } from "react-icons/fi";
@@ -20,9 +20,10 @@ import { useDeleteProducts } from "services/mutations";
 import { deleteCookie } from "utils/cookie";
 import { useNavigate } from "react-router-dom";
 import Loader from "components/modules/Loader";
+import ProductsList from "components/productsList/ProductsList";
 
 function ProductsPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [deleteModal, setDeleteModal] = useState({
     show: false,
@@ -34,8 +35,8 @@ function ProductsPage() {
   const [showCheckbox, setShowCheckbox] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const { isLoading, error, data , isPending } = useGetProducts(page);
-  
+  const { isLoading, error, data, isPending } = useGetProducts(page);
+
   const { mutate } =
     selectedProducts.length > 1
       ? useDeleteProducts(setDeleteModal)
@@ -48,7 +49,6 @@ function ProductsPage() {
         : [...selected, id]
     );
   };
-
 
   const deleteHandler = (e, id) => {
     e.preventDefault();
@@ -78,10 +78,10 @@ function ProductsPage() {
       mutate(deleteModal.ids);
     }
   };
-  const logoutHandler = ()=>{
+  const logoutHandler = () => {
     deleteCookie("token");
     navigate("/login");
-  }
+  };
 
   const showAddModal = (e) => {
     e.preventDefault();
@@ -97,11 +97,11 @@ function ProductsPage() {
     setSelectedProducts([]);
   };
 
-  if (isLoading) return <Loader/>;
+  if (isLoading) return <Loader />;
 
   if (error) return "An error has occurred: " + error.message;
-  const products = data?.data?.data || [];;
-  console.log(data?.data)
+  const products = data?.data?.data || [];
+  console.log(data?.data);
   return (
     <div className={styles.container}>
       {deleteModal.show && (
@@ -126,10 +126,8 @@ function ProductsPage() {
           <div>
             <p>محمد رضایی</p>
             <span>مدیر</span>
-           
           </div>
-          < CiLogout size="27px" title="خروج" onClick={logoutHandler}/>
-          
+          <CiLogout size="27px" title="خروج" onClick={logoutHandler} />
         </div>
       </header>
 
@@ -179,28 +177,15 @@ function ProductsPage() {
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td>{product.quantity}</td>
-                <td>{product.price}</td>
-                <td className={styles.id}>{product.id}</td>
-                <td className={styles.oprations}>
-                  <a onClick={(e) => showEditModal(e, product)}>
-                    <BsPencilSquare color="#4ADE80" />
-                  </a>
-                  <a onClick={(e) => deleteHandler(e, product.id)}>
-                    <BsTrash color="#F43F5E" />
-                  </a>
-                  {showCheckbox && (
-                    <input
-                      type="checkbox"
-                      className={styles.checkbox}
-                      checked={selectedProducts.includes(product.id)}
-                      onChange={() => productSelectHandler(product.id)}
-                    />
-                  )}
-                </td>
-              </tr>
+              <ProductsList
+                key={product.id}
+                product={product}
+                selectedProducts={selectedProducts}
+                productSelectHandler = {productSelectHandler}
+                showCheckbox={showCheckbox}
+                deleteHandler={deleteHandler}
+                showEditModal={showEditModal}
+              />
             ))}
           </tbody>
         </table>
