@@ -13,7 +13,8 @@ function Router() {
     password: "",
     confirmPassword: "",
   });
-  const token = getCookie("token");
+  
+  const token = getCookie("token"); 
   return (
     <BrowserRouter>
       <Routes>
