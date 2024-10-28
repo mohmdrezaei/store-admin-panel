@@ -7,13 +7,11 @@ import { toast } from "react-toastify";
 
 const useRegister = () => {
   const mutationFn = (data) => api.post("auth/register", data);
-
   return useMutation({ mutationFn });
 };
 
 const useLogin = () => {
   const mutationFn = (data) => api.post("auth/login", data);
-
   return useMutation({ mutationFn });
 };
 
@@ -51,7 +49,7 @@ const useDeleteProduct = (setDeleteModal) => {
     await queryClient.invalidateQueries({ queryKey: ["products"] });
     
       setDeleteModal({ show: false, message: "", ids: [] });
-       toast.success("محصول مورد نظر با موفقیت حذف شدند")
+       toast.success("محصول مورد نظر با موفقیت حذف شد")
   };
   return useMutation({ mutationFn, onSuccess });
 };

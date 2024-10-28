@@ -1,7 +1,6 @@
 .container {
     width: 1140px;
     margin: auto;
-    
 }
 
 .container header {
@@ -68,6 +67,7 @@
     border-collapse: collapse;
     border-radius: 30px;
     border: 1px solid #E4E4E4;
+    overflow: hidden;
     font-size: 14px;
     margin-bottom: 50px;
 }
@@ -80,14 +80,18 @@
 
 }
 
+
+
+
 .table tbody tr {
     height: 60px;
     background-color: #fff;
     border-bottom: 1px solid #F2F2F2;
     color: #282828;
+
 }
-.table tbody tr:hover {
-    background-color: #F9F9F9;
+.table tbody tr:hover{
+    background-color: #ebeaea;
 }
 
 .table tr td:nth-child(1) {
@@ -127,13 +131,5 @@
     .container {
         width: 100%;
     }
-
     
-}
-
-@media (max-width: 800px) {
-    .table {
-        display: block;
-        overflow-x: scroll; 
-    }
 }

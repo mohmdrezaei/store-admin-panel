@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { getCookie } from "utils/cookie"; 
+
 
 function getUserInfoFromToken(token) {
         try {
@@ -11,11 +11,5 @@ function getUserInfoFromToken(token) {
         }
       }
       
-
-// if (userInfo) {
-//   console.log('User Info:', userInfo);
-// } else {
-//   console.log('Failed to decode token');
-// }
 
 export default getUserInfoFromToken

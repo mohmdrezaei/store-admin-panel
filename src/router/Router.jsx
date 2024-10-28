@@ -6,6 +6,7 @@ import LoginPage from "pages/LoginPage";
 import ProductsPage from "pages/ProductsPage";
 import PageNotFound from "pages/404";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import PublicRoutes from "./PublicRoutes";
 
 function Router() {
   const [formData, setFormData] = useState({
@@ -13,36 +14,30 @@ function Router() {
     password: "",
     confirmPassword: "",
   });
-  
-  const token = getCookie("token"); 
+
+  const token = getCookie("token");
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/register"
-          element={
-            !token ? (
+        <Route element={<PublicRoutes />}>
+          <Route
+            path="/register"
+            element={
               <RegisterPage formData={formData} setFormData={setFormData} />
-            ) : (
-              <Navigate to="/products" />
-            )
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            !token ? (
+            }
+          />
+          <Route
+            path="/login"
+            element={
               <LoginPage formData={formData} setFormData={setFormData} />
-            ) : (
-              <Navigate to="/products" />
-            )
-          }
-        />
-        <Route path="/" element={<Navigate to="/login" />} />
+            }
+          />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+        </Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/products" element={<ProductsPage />} />
         </Route>
-        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

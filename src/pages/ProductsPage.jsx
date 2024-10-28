@@ -1,7 +1,18 @@
 import { useState } from "react";
+import { getCookie, deleteCookie } from "utils/cookie";
+import { useNavigate } from "react-router-dom";
+import Loader from "components/modules/Loader";
+import ProductsList from "components/productsList/ProductsList";
+import getUserInfoFromToken from "services/userInfo";
+
+import DeleteModal from "components/DeleteModal/DeleteModal";
+import AddModal from "components/AddModal/AddModal";
+import { toast } from "react-toastify";
+import Pagination from "components/pagination/Pagination";
+import { useGetProducts } from "services/queries";
+import { useDeleteProduct, useDeleteProducts } from "services/mutations";
 
 import { BsTrash } from "react-icons/bs";
-
 import { BsSearch } from "react-icons/bs";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { FiMoreHorizontal } from "react-icons/fi";
@@ -9,23 +20,10 @@ import { IoCloseSharp } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import styles from "./ProductsPage.module.css";
 
-import DeleteModal from "components/DeleteModal/DeleteModal";
-import AddModal from "components/AddModal/AddModal";
-import { toast } from "react-toastify";
-import Pagination from "components/pagination/Pagination";
-import { useGetProducts } from "services/queries";
-import { useDeleteProduct } from "services/mutations";
-import { useDeleteProducts } from "services/mutations";
-
-import { deleteCookie } from "utils/cookie";
-import { useNavigate } from "react-router-dom";
-import Loader from "components/modules/Loader";
-import ProductsList from "components/productsList/ProductsList";
-import getUserInfoFromToken from "services/userInfo";
-import { getCookie } from "utils/cookie";
-
-
 function ProductsPage() {
+  const token = getCookie("token");
+  const userInfo = getUserInfoFromToken(token);
+
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [deleteModal, setDeleteModal] = useState({
@@ -43,10 +41,8 @@ function ProductsPage() {
   const { mutate } =
     selectedProducts.length > 1
       ? useDeleteProducts(setDeleteModal)
-      : useDeleteProduct(setDeleteModal);
-    const token = getCookie("token");
-    const userInfo = getUserInfoFromToken(token);
-      
+      : useDeleteProduct(setDeleteModal)
+
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
       selected.includes(id)
@@ -104,9 +100,9 @@ function ProductsPage() {
 
   if (isLoading) return <Loader />;
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return "محصولی یافت نشد " ;
   const products = data?.data?.data || [];
-  console.log(data?.data);
+
   return (
     <div className={styles.container}>
       {deleteModal.show && (
@@ -186,7 +182,7 @@ function ProductsPage() {
                 key={product.id}
                 product={product}
                 selectedProducts={selectedProducts}
-                productSelectHandler = {productSelectHandler}
+                productSelectHandler={productSelectHandler}
                 showCheckbox={showCheckbox}
                 deleteHandler={deleteHandler}
                 showEditModal={showEditModal}
