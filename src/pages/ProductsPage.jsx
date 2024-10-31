@@ -98,14 +98,16 @@ function ProductsPage() {
     setShowCheckbox(false);
     setSelectedProducts([]);
   };
+  useEffect(() => {
+    if (error || data?.data?.length === 0) {
+      setPage(page=>page - 1);
+      setSearchParams({ page: page-1 });
+    }
+  }, [error, data]);
 
   if (isLoading) return <Loader />;
 
-  if (error || data?.data?.length === 0) {
-    <h2>هیچ محصولی وجود ندارد.</h2>;
-    setPage(page - 1);
-    setSearchParams({ page: page - 1 });
-  }
+  
 
   const products = data?.data || [];
 
