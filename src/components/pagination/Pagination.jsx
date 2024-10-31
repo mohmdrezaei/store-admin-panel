@@ -1,17 +1,21 @@
 import { json, useSearchParams } from "react-router-dom";
-import styles from "./Pagination.module.css"
+import styles from "./Pagination.module.css";
 import { useEffect } from "react";
 
-function Pagination({page , setPage, pages ,products}) {
-  const [searchParams , setSearchParams] = useSearchParams();
-  
+function Pagination({
+  page,
+  setPage,
+  pages,
+  searchParams,
+  setSearchParams,
+}) {
   useEffect(() => {
-    setPage(JSON.parse(searchParams.get('page')) || 1);
+    setPage(JSON.parse(searchParams.get("page")) || 1);
   }, [searchParams]);
-  
+
   const handlePageClick = (pageNumber) => {
     setPage(pageNumber);
-    setSearchParams({page : pageNumber});
+    setSearchParams({ page: pageNumber });
   };
   const pageNumbers = [];
   for (let i = 1; i <= pages; i++) {
@@ -25,16 +29,15 @@ function Pagination({page , setPage, pages ,products}) {
           key={number}
           onClick={() => handlePageClick(number)}
           style={{
-            backgroundColor: page === number ? '#55A3F0' : 'inherit',
-            color: page === number ? 'white' : '#8D8D8D80',
+            backgroundColor: page === number ? "#55A3F0" : "inherit",
+            color: page === number ? "white" : "#8D8D8D80",
           }}
         >
           {number}
         </button>
       ))}
-      
     </div>
   );
 }
 
-export default Pagination
+export default Pagination;

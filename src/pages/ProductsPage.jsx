@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCookie, deleteCookie } from "utils/cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "components/modules/Loader";
 import ProductsList from "components/productsList/ProductsList";
 import getUserInfoFromToken from "services/userInfo";
@@ -23,6 +23,7 @@ import styles from "./ProductsPage.module.css";
 function ProductsPage() {
   const token = getCookie("token");
   const userInfo = getUserInfoFromToken(token);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -100,9 +101,10 @@ function ProductsPage() {
 
   if (isLoading) return <Loader />;
 
-  if (error && data?.data?.length === 0) {
-    <h2>هیچ محصولی وجود ندارد.</h2>
+  if (error || data?.data?.length === 0) {
+    <h2>هیچ محصولی وجود ندارد.</h2>;
     setPage(page - 1);
+    setSearchParams({ page: page - 1 });
   }
 
   const products = data?.data || [];
@@ -204,7 +206,13 @@ function ProductsPage() {
         </table>
       )}
       {data?.totalPages > 1 && (
-        <Pagination page={page} setPage={setPage} pages={data.totalPages} />
+        <Pagination
+          page={page}
+          setPage={setPage}
+          pages={data.totalPages}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
       )}
     </div>
   );
