@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie, deleteCookie } from "utils/cookie";
 import { useNavigate } from "react-router-dom";
 import Loader from "components/modules/Loader";
@@ -41,7 +41,7 @@ function ProductsPage() {
   const { mutate } =
     selectedProducts.length > 1
       ? useDeleteProducts(setDeleteModal)
-      : useDeleteProduct(setDeleteModal)
+      : useDeleteProduct(setDeleteModal);
 
   const productSelectHandler = (id) => {
     setSelectedProducts((selected) =>
@@ -98,11 +98,14 @@ function ProductsPage() {
     setSelectedProducts([]);
   };
 
-  if (isLoading ) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  if (error ) return <div>هیچ محصولی وجود ندارد</div>
-  const products = data?.data;
- 
+  if (error && data?.data?.length === 0) {
+    <h2>هیچ محصولی وجود ندارد.</h2>
+    setPage(page - 1);
+  }
+
+  const products = data?.data || [];
 
   return (
     <div className={styles.container}>
@@ -178,7 +181,7 @@ function ProductsPage() {
             </tr>
           </thead>
           <tbody>
-          {products.length > 0  ? (
+            {products.length > 0 ? (
               products?.map((product) => (
                 <ProductsList
                   key={product.id}
@@ -192,7 +195,7 @@ function ProductsPage() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', color: 'red' }}>
+                <td colSpan="5" style={{ textAlign: "center", color: "red" }}>
                   هیچ محصولی وجود ندارد.
                 </td>
               </tr>
@@ -200,12 +203,8 @@ function ProductsPage() {
           </tbody>
         </table>
       )}
-      {data.totalPages > 1 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          pages={data.totalPages}
-        />
+      {data?.totalPages > 1 && (
+        <Pagination page={page} setPage={setPage} pages={data.totalPages} />
       )}
     </div>
   );

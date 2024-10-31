@@ -2,7 +2,7 @@ import { json, useSearchParams } from "react-router-dom";
 import styles from "./Pagination.module.css"
 import { useEffect } from "react";
 
-function Pagination({page , setPage, pages}) {
+function Pagination({page , setPage, pages ,products}) {
   const [searchParams , setSearchParams] = useSearchParams();
   
   useEffect(() => {
